@@ -1,9 +1,33 @@
 import React, { Component } from 'react';
+import api from '../../services/api';
 
-// import { Container } from './styles';
+import './styles.css';
 
 export default class product extends Component {
+  state = {
+    product: {}
+  };
+
+  async componentDidMount() {
+    const { id } = this.props.match.params;
+
+    const response = await api.get(`/products/${id}`);
+
+    this.setState({ product: response.data })
+  }
+
   render() {
-    return <h1>product</h1>
+    const { product } = this.state;
+
+    return (
+      <div className="product-info">
+        <h1>{product.title}</h1>
+        <p>{product.description}</p>
+
+        <p>
+          URL: <a href={product.url}>{product.url}</a>
+        </p>
+      </div>
+    )
   }
 }
